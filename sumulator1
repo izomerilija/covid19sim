@@ -6,16 +6,10 @@ from tkinter import *
 pygame.init()
 
 screen = pygame.display.set_mode((750, 790))
-
-poz = (0, 0)
-
 clock = pygame.time.Clock()
-
-running = True
-
-pygame.display.set_caption('EPIDEMIJA!!!!')
-
+pygame.display.set_caption('simulator')
 font = pygame.font.SysFont('Arial', 20)
+
 
 alive = 0
 infected = 0
@@ -27,8 +21,9 @@ on = 0
 k = 0
 B = []
 empty = 1
+running = True
 
-# Pravljenje dugmica i grida
+# buttons & grid
 
 for y in range(150):
     temp = []
@@ -76,6 +71,7 @@ textsurface = font.render("Stop", True, (0, 0, 0))
 screen.blit(textsurface, (320, 749))
 
 pygame.display.flip()
+
 
 class Osoba:
     def __init__(self, x, y, age, id):
@@ -306,7 +302,6 @@ for i in range(n):
 
 
 while running:
-
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
