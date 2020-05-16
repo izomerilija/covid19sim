@@ -5,12 +5,12 @@ pg.init()
 
 screen = pg.display.set_mode((400,300))
 
+myfont = pg.font.SysFont("Arial", 20)
+label = myfont.render(" Unesite broj osoba =>",1, (255,255,0))
+
 textBoxes = []
-textBoxO = TextBox(100,50,100,50)
+textBoxO = TextBox(168,29,100,50,border = 6)
 textBoxes.append(textBoxO)
-#myfont = pg.font.SysFont("Arial", 60,)
-#sentence = input("Unesite broj osoba: ")
-#label = myfont.render(sentence,1, (255,255,0))
 
 running = True
 while running:
@@ -22,10 +22,15 @@ while running:
         if event.type == pg.MOUSEBUTTONDOWN:
             for box in textBoxes:
                 box.checkClick(pg.mouse.get_pos())
+
+        if event.type == pg.KEYDOWN:
+            for box in textBoxes:
+                if box.active:
+                    box.addText(event.key)
                 
     #draw
     screen.fill((54,54,54))
-
+    screen.blit(label,(0,40))
     for box in textBoxes:
         box.draw(screen)
 
