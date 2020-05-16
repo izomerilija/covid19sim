@@ -48,7 +48,12 @@ class TextBox:
         text = self.font.render(self.text,False, self.textColour)
         textVisina = text.get_height()
         textSirina = text.get_width()
-        self.image.blit(text,(self.border*2,(self.visina - textVisina)//2))
+        if textSirina < self.sirina - self.border*2:
+            self.image.blit(text,(self.border*2,(self.visina - textVisina)//2))
+        else:
+            self.image.blit(text,((self.border*2) + (self.sirina - textSirina - self.border*3),
+            (self.visina - textVisina)//2))
+        
         screen.blit(self.image,self.pos)
 
     def addText(self,key):
@@ -120,4 +125,7 @@ class TextBox:
                 self.active = False
         else:
             self.active = False
+    
+    def returnValue(self):
+        return self.text
             
