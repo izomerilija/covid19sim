@@ -1,0 +1,32 @@
+import pygame as pg
+from TextBox_class import *
+
+pg.init()
+
+screen = pg.display.set_mode((400,300))
+
+textBoxes = []
+textBoxO = TextBox(100,50,100,50)
+textBoxes.append(textBoxO)
+#myfont = pg.font.SysFont("Arial", 60,)
+#sentence = input("Unesite broj osoba: ")
+#label = myfont.render(sentence,1, (255,255,0))
+
+running = True
+while running:
+    #event
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            running = False
+
+        if event.type == pg.MOUSEBUTTONDOWN:
+            for box in textBoxes:
+                box.checkClick(pg.mouse.get_pos())
+                
+    #draw
+    screen.fill((54,54,54))
+
+    for box in textBoxes:
+        box.draw(screen)
+
+    pg.display.update()
