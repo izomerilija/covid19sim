@@ -1,0 +1,31 @@
+import pygame as pg
+vec = pg.math.Vector2
+
+class TextBox:
+    def __init__(self,x,y,sirina,visina):
+        self.x = x
+        self.y = y
+        self.visina = visina
+        self.sirina = sirina
+        self.pos = vec(x,y)
+        self.size = vec(sirina,visina)
+        self.image = pg.Surface((sirina,visina))
+        self.bg_colour = (124,124,124)
+        self.active_colour = (255,255,255)
+        self.active = False
+
+    def draw(self,screen):
+        if not self.active:
+            self.image.fill(self.bg_colour)
+        else:
+            self.image.fill(self.active_colour)
+        screen.blit(self.image,self.pos)
+
+    def checkClick(self,pos):
+        if pos[0] > self.x and pos[0] < (self.x + self.sirina):
+            if pos[1] > self.y and pos[1] < (self.y + self.visina):
+                self.active = True
+            else:
+                self.active = False
+        else:
+            self.active = False
