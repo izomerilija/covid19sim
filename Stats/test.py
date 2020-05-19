@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 
+"""
 plt.ion()
 
 x1 = [1,2,3,4,5]
@@ -19,5 +21,10 @@ for i in range(50):
     x1.append(i+6)
     y1.append(y1[i+4]+y1[i+3])
     y2.append(y2[i+4]*2)
+"""
+
+df = pd.read_excel('Stats/Real stats/Stats world.xlsx')
+
+print(df)
 
 nesto = input()

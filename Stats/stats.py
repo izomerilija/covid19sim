@@ -52,6 +52,16 @@ df = pd.read_excel('Stats/Real stats/Stats Serbia.xlsx')
 ns_infected = np.array(df['Novi Sad']).cumsum()
 serbia_days = np.array(df['Dan'])
 valjevo_infected = np.array(df['Valjevo']).cumsum()
+df2 = pd.read_csv('Stats/Real stats/Stats New York.csv')
+ny_infected = np.array(df2['Cases'],dtype=int).cumsum()
+ny_days = np.array(df2['DATE_OF_INTEREST'],dtype=str)
+df3 = pd.read_excel('Stats/Real stats/Stats Milano.xlsx')
+milano_infected = np.array(df3['Milano']).cumsum()
+milano_days = np.array(df3['Dan'])
+df4 = pd.read_excel('Stats/Real stats/Stats world.xlsx')
+world_infected = np.array(df4['Broj']).cumsum()
+world_days = np.array(df4['Dan'])
+
 """
 funkcija za plotovanje samo inficiranih za parametre prima broj inficiranih, dane, "vreme", tj. iteraciju u petlji i broj zapisanih dana
 ova funkcija je vama nebitna koristi se samo da se skrati kod kasnije za prikaz realnog sveta
@@ -75,6 +85,24 @@ def show_valjevo(vreme):
     plt.title("Odnos zarazenih vremenom - Valjevo")
     show_infected_plot(valjevo_infected,serbia_days,vreme,55)
 
+#funkcija za plotovanje za new york
+def show_ny(vreme):
+    plt.figure(4)
+    plt.title("Odnos zarazenih vremenom - New York")
+    show_infected_plot(ny_infected,ny_days,vreme,79)
+
+#funkcija za plotovanje za milano
+def show_milano(vreme):
+    plt.figure(5)
+    plt.title("Odnos zarazenih vremenom - Milano")
+    show_infected_plot(milano_infected,milano_days,vreme,7)
+
+#funkcija za plotovanje za svet
+def show_world(vreme):
+    plt.figure(6)
+    plt.title("Odnos zarazenih vremenom - Svet")
+    show_infected_plot(world_infected,world_days,vreme,116)
+
 """
 #test funkcije za plotovanje za novi sad    
 for i in range(55):
@@ -85,6 +113,12 @@ nesto = input()
 #test funkcije za plotovanje za valjevo
 for i in range(55):
     show_valjevo(i)
+
+nesto = input()
+
+#test funkcije za plotovanje za new york
+for i in range(79):
+    show_ny(i)
 
 nesto = input()
 """
@@ -126,8 +160,7 @@ for i in range(300):
         zbir -= h
 
     if i > 30 and i < 200:
-        show_ns(i)
-        show_valjevo(i)
+        show_milano(i-30)
     
     show_plot(zbir,d,h,i,pop)
 
