@@ -31,6 +31,7 @@ def show_plot(infected,dead,healed,vreme,population):
     global zivi
     global izleceni
     zivi[vreme] = population - mrtvi[vreme] - izleceni[vreme] - rez[vreme]
+    plt.figure(1)
     plt.xlabel("Vreme")
     plt.ylabel("Zarazeni")
     plt.title("Odnos zarazenih vremenom")
@@ -58,20 +59,20 @@ ova funkcija je vama nebitna koristi se samo da se skrati kod kasnije za prikaz 
 def show_infected_plot(infected,days,vreme,broj_pod):
     plt.xlabel("Vreme")
     plt.ylabel("Zarazeni")
-    plt.title("Odnos zarazenih vremenom")
     plt.plot(days[0:vreme],infected[0:vreme],color = 'red')
     plt.fill_between(days[0:vreme],infected[0:vreme],color = 'red')
     plt.show()
-    plt.pause(0.001)
-    if vreme != broj_pod - 1:
-        plt.clf()
 
 #funkcija za plotovanje za novi sad
 def show_ns(vreme):
+    plt.figure(2)
+    plt.title("Odnos zarazenih vremenom - Novi Sad")
     show_infected_plot(ns_infected,serbia_days,vreme,55)
 
 #funkcija za plotovanje za valjevo
 def show_valjevo(vreme):
+    plt.figure(3)
+    plt.title("Odnos zarazenih vremenom - Valjevo")
     show_infected_plot(valjevo_infected,serbia_days,vreme,55)
 
 """
@@ -124,6 +125,10 @@ for i in range(300):
         h += rand(1,7)
         zbir -= h
 
+    if i > 30 and i < 200:
+        show_ns(i)
+        show_valjevo(i)
+    
     show_plot(zbir,d,h,i,pop)
 
 #ovo postoji da ne bi odmah nakon zavrsetka plotovanja izaslo
