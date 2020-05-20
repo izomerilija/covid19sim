@@ -8,7 +8,7 @@ pg.init()
 
 rangelow = 3
 rangehigh = 497
-humansize = 2
+humansize = 1
 odmeraj = 0.1
 duzina = 500
 
@@ -28,7 +28,7 @@ class Citizen:
         screensurf = pg.display.get_surface()
         pg.draw.rect(window, self.color, (self.x, self.y, humansize, humansize))
         pg.display.update()
-        i = 2
+        i = 1
         strana = ""
         time.sleep(odmeraj)
         while i < duzina:
@@ -44,111 +44,57 @@ class Citizen:
             elif self.y > i and screensurf.get_at([self.x, self.y - i]) == white:
                 strana = "gore"
                 break
-            i += 2
+            i += 1
         if strana == "desno":
             i += self.x
-            if screensurf.get_at([i - 1, self.y]) == white:
-                while self.x < i - 4:
-                    pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                    pg.draw.rect(window, self.color, (self.x + 2, self.y, humansize, humansize))
-                    pg.display.update()
-                    self.x += 2
-                    time.sleep(odmeraj)
+            while self.x < i:
                 pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                pg.draw.rect(window, self.color, (self.x + 3, self.y, humansize, humansize))
+                pg.draw.rect(window, self.color, (self.x + 1, self.y, humansize, humansize))
                 pg.display.update()
-                self.x += 3
+                self.x += 1
                 time.sleep(odmeraj)
-            else:
-                while self.x < i:
-                    pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                    pg.draw.rect(window, self.color, (self.x + 2, self.y, humansize, humansize))
-                    pg.display.update()
-                    self.x += 2
-                    time.sleep(odmeraj)
 
         elif strana == "levo":
-            i = self.x - i - 1
-            if screensurf.get_at([i + 1, self.y]) == white:
-                while self.x > i + 4:
-                    pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                    pg.draw.rect(window, self.color, (self.x - 2, self.y, humansize, humansize))
-                    pg.display.update()
-                    self.x -= 2
-                    time.sleep(odmeraj)
+            i = self.x - i
+            while self.x > i:
                 pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                pg.draw.rect(window, self.color, (self.x - 3, self.y, humansize, humansize))
+                pg.draw.rect(window, self.color, (self.x - 1, self.y, humansize, humansize))
                 pg.display.update()
-                self.x -= 3
+                self.x -= 1
                 time.sleep(odmeraj)
-            else:
-                while self.x > i:
-                    pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                    pg.draw.rect(window, self.color, (self.x - 2, self.y, humansize, humansize))
-                    pg.display.update()
-                    self.x -= 2
-                    time.sleep(odmeraj)
         elif strana == "dole":
             i += self.y
-            if screensurf.get_at([self.x, i - 1]) == white:
-                while self.y < i - 4:
-                    pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                    pg.draw.rect(window, self.color, (self.x, self.y + 2, humansize, humansize))
-                    pg.display.update()
-                    self.y += 2
-                    time.sleep(odmeraj)
+            while self.y < i:
                 pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                pg.draw.rect(window, self.color, (self.x, self.y + 3, humansize, humansize))
+                pg.draw.rect(window, self.color, (self.x, self.y + 1, humansize, humansize))
                 pg.display.update()
-                self.y += 3
+                self.y += 1
                 time.sleep(odmeraj)
-            else:
-                while self.y < i:
-                    pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                    pg.draw.rect(window, self.color, (self.x, self.y + 2, humansize, humansize))
-                    pg.display.update()
-                    self.y += 2
-                    time.sleep(odmeraj)
         else:
-            i = self.y - i - 1
-            if screensurf.get_at([self.x, i + 1]) == white:
-                while self.y > i + 4:
-                    pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                    pg.draw.rect(window, self.color, (self.x, self.y - 2, humansize, humansize))
-                    pg.display.update()
-                    self.y -= 2
-                    time.sleep(odmeraj)
+            i = self.y - i
+            while self.y > i:
                 pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                pg.draw.rect(window, self.color, (self.x, self.y - 3, humansize, humansize))
+                pg.draw.rect(window, self.color, (self.x, self.y - 1, humansize, humansize))
                 pg.display.update()
-                self.y -= 3
+                self.y -= 1
                 time.sleep(odmeraj)
-            else:
-                while self.y > i:
-                    pg.draw.rect(window, black, (self.x, self.y, humansize, humansize))
-                    pg.draw.rect(window, self.color, (self.x, self.y - 2, humansize, humansize))
-                    pg.display.update()
-                    self.y -= 2
-                    time.sleep(odmeraj)
         pg.draw.rect(window, white, (self.x, self.y, humansize, humansize))
-
-
 
     def __init__(self):
         self.color = healthycolor
         self.x = random.randint(rangelow, rangehigh)
         self.y = random.randint(rangelow, rangehigh)
-        while screensurf.get_at([self.x, self.y]) != black or screensurf.get_at([self.x+1, self.y]) != black or screensurf.get_at([self.x, self.y+1]) != black or screensurf.get_at([self.x+1, self.y+1]) != black:
+        while screensurf.get_at([self.x, self.y]) != black:
             self.x = random.randint(rangelow, rangehigh)
             self.y = random.randint(rangelow, rangehigh)
         self.setdestination()
         self.goto()
- 
+
 def spawn():
     c = Citizen()
 
 window = pg.display.set_mode((duzina,duzina))
-mapa = pg.image.load('proj\\mapa.png')
+mapa = pg.image.load('mapa.png')
 running = True
 while running:
     for event in pg.event.get():
