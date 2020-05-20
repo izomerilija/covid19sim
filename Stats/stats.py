@@ -63,10 +63,10 @@ world_infected = np.array(df4['Broj']).cumsum()
 world_days = np.array(df4['Dan'])
 
 """
-funkcija za plotovanje samo inficiranih za parametre prima broj inficiranih, dane, "vreme", tj. iteraciju u petlji i broj zapisanih dana
+funkcija za plotovanje samo inficiranih za parametre prima broj inficiranih, dane i "vreme", tj. iteraciju u petlji
 ova funkcija je vama nebitna koristi se samo da se skrati kod kasnije za prikaz realnog sveta
 """
-def show_infected_plot(infected,days,vreme,broj_pod):
+def show_infected_plot(infected,days,vreme):
     plt.xlabel("Vreme")
     plt.ylabel("Zarazeni")
     plt.plot(days[0:vreme],infected[0:vreme],color = 'red')
@@ -77,31 +77,31 @@ def show_infected_plot(infected,days,vreme,broj_pod):
 def show_ns(vreme):
     plt.figure(2)
     plt.title("Odnos zarazenih vremenom - Novi Sad")
-    show_infected_plot(ns_infected,serbia_days,vreme,55)
+    show_infected_plot(ns_infected,serbia_days,vreme)
 
 #funkcija za plotovanje za valjevo
 def show_valjevo(vreme):
     plt.figure(3)
     plt.title("Odnos zarazenih vremenom - Valjevo")
-    show_infected_plot(valjevo_infected,serbia_days,vreme,55)
+    show_infected_plot(valjevo_infected,serbia_days,vreme)
 
 #funkcija za plotovanje za new york
 def show_ny(vreme):
     plt.figure(4)
     plt.title("Odnos zarazenih vremenom - New York")
-    show_infected_plot(ny_infected,ny_days,vreme,79)
+    show_infected_plot(ny_infected,ny_days,vreme)
 
 #funkcija za plotovanje za milano
 def show_milano(vreme):
     plt.figure(5)
     plt.title("Odnos zarazenih vremenom - Milano")
-    show_infected_plot(milano_infected,milano_days,vreme,7)
+    show_infected_plot(milano_infected,milano_days,vreme)
 
 #funkcija za plotovanje za svet
 def show_world(vreme):
     plt.figure(6)
     plt.title("Odnos zarazenih vremenom - Svet")
-    show_infected_plot(world_infected,world_days,vreme,116)
+    show_infected_plot(world_infected,world_days,vreme)
 
 """
 #test funkcije za plotovanje za novi sad    
@@ -160,7 +160,7 @@ for i in range(300):
         zbir -= h
 
     if i > 30 and i < 200:
-        show_milano(i-30)
+        show_world(i)
     
     show_plot(zbir,d,h,i,pop)
 
