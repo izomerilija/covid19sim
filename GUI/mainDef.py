@@ -23,10 +23,9 @@ def main():
     labelReady = Button(220,210,70,50,(255,0,0),"READY!")
     labelReturn = Button(150,170,70,50,(255,255,0),"RETURN!")
     labelCity = myfont.render(" Chose a real city =>",1, (255,255,0))
-    dropButton = Button(160,130,50,30,(255,5,0),"                               ")
+    dropButton = Button(199,156,80,15,(40,40,40),"                               ")
     myfont2 = pg.font.SysFont("Arial", 17)
-    labelSee = myfont2.render(" click to",1, (255,255,0))
-    labelSee2 = myfont2.render("   see",1, (255,255,0))
+    labelSee = myfont2.render(" click to see",1, (0,0,0))
 
     win = menuScreen.makeDisplay()
     mapa = pg.image.load("mapCovid.png")
@@ -36,40 +35,33 @@ def main():
     textBoxes.append(textBoxO)
     textBoxes.append(textBox1)
     running = True
-    
-
+   
     while running:
         menuScreen.screenUpdate()
         tempScreen.screenUpdate()
         mousePos = pg.mouse.get_pos()
         mouseClick = pg.mouse.get_pressed()
 
-        
-        
         tempDropButton = dropButton.isOver(mousePos, mouseClick)
         if tempDropButton:
             b = 170
             i = 0
             for i in range(5):
                 b += 30
-                textBox1 = TextBox(218,120,100,50,4)
+                textBox1 = TextBox(188,100,100,50,4)
                 textBoxes.append(textBox1)
                 textBox1.draw(menuScreen.returnTitle())
                 if i == 0:
                     city = myfont.render(" novi sad",1,(255,255,0))
                 if i == 1:
-                    city = myfont.render("  valjevo",1,(255,255,0))
-                if i == 2:
-                    city = myfont.render("  wuhan",1,(255,255,0))
-                if i == 3:
                     city = myfont.render(" new york",1,(255,255,0))
-                if i == 4:
+                if i == 2:
                     city = myfont.render("  milano",1,(255,255,0))
-                menuScreen.returnTitle().blit(city,(233,b-30))
-            
-        
-        
-        #keys = pg.key.get_pressed()
+                if i == 3:
+                    city = myfont.render("  valjevo",1,(255,255,0))
+                if i == 4:
+                    city = myfont.render("   svet",1,(255,255,0))
+                menuScreen.returnTitle().blit(city,(206,b-30))
 
         if menuScreen.checkUpdate():
             tempScreenButton = labelReady.isOver(mousePos,mouseClick)
@@ -81,10 +73,8 @@ def main():
             textBoxO.draw(menuScreen.returnTitle())
             textBox1.draw(menuScreen.returnTitle())
             dropButton.drawButton(menuScreen.returnTitle())
-            menuScreen.returnTitle().blit(labelSee, (160,130))
-            menuScreen.returnTitle().blit(labelSee2, (163,141))
-
-            
+            menuScreen.returnTitle().blit(labelSee, (200,150))
+   
             if tempScreenButton:
                 simulationPlay(simScreen,textBoxO)
                 menuScreen.endCurrent()
@@ -126,14 +116,8 @@ def main():
                     if box.active:
                         box.addText(event.key)
                         
-            #draw
-        
-        
-        
-        #menuScreen.blit(labelReady,(151,179))
-        
-        
-        
 
         pg.display.update()
         mainClock.tick(60)
+
+main()
