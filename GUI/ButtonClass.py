@@ -2,7 +2,7 @@ import pygame as pg
 
 
 class Button:
-    def __init__(self,x, y, sx, sy, color, text = ''):
+    def __init__(self,x, y, sx, sy, color, text = '', colorB = (255,255,0), size = 20, font = "arial"):
         self.x = x
         self.y = y
         self.sx = sx
@@ -10,6 +10,9 @@ class Button:
         self.color = color
         self.text = text
         self.current = False
+        self.colorB = colorB
+        self.size = size
+        self.font = font
 
     def  drawButton(self,display,outline = None):
         if outline:
@@ -17,8 +20,8 @@ class Button:
         pg.draw.rect(display,self.color, (self.x,self.y,self.sx,self.sy))
 
         if self.text != "":
-            font = pg.font.SysFont("arial",20)
-            text = font.render(self.text, 1, (255,255,0))
+            font = pg.font.SysFont(self.font,self.size)
+            text = font.render(self.text, 1, self.colorB)
             display.blit(text, (self.x + (self.sx / 2 - text.get_width()/2), self.y + (self.sy / 2 - text.get_height()/2)))
 
     def isOver(self, pos, click):
@@ -29,4 +32,4 @@ class Button:
         else:
             self.current = False
             return False
- 
+    
