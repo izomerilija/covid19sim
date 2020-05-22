@@ -3,6 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from random import randint as rand
+import math
+from sklearn.preprocessing import MinMaxScaler
+from keras.models import Sequential
+from keras.layers import Dense, LSTM
 
 #cini plotovanje interaktivnim
 plt.ion()
@@ -123,6 +127,53 @@ for i in range(79):
 nesto = input()
 """
 
+#funkcija za predikciju dogadjaja
+def predict_infected(infected,vreme2):
+    infected = np.array(infected)
+    broj_treninga = len(infected)
+
+    scaler = MinMaxScaler(feature_range = (0,1))
+    skalirani_podaci = scaler.fit_transform(infected.reshape(-1,1))
+    trenazni_podaci = skalirani_podaci[0:broj_treninga,:]
+
+    x_train = []
+    y_train = []
+
+    for i in range(10,len(trenazni_podaci)):
+        x_train.append(trenazni_podaci[i - 10:i,0])
+        y_train.append(trenazni_podaci[i,0])
+
+    x_train = np.array(x_train)
+    y_train = np.array(y_train)
+    x_train = np.reshape(x_train,(x_train.shape[0],x_train.shape[1],1))
+
+    model = Sequential()
+    model.add(LSTM(50,return_sequences = True,input_shape = (x_train.shape[1],1)))
+    model.add(LSTM(50,return_sequences = False))
+    model.add(Dense(25))
+    model.add(Dense(1))
+
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.fit(x_train, y_train, batch_size=1, epochs=10)
+
+    test_data = skalirani_podaci[broj_treninga - 10: , : ]
+    x_test = []
+
+    for i in range(10,len(test_data)):
+        x_test.append(test_data[i - 10:i,0])
+
+    x_test = np.array(x_test)
+    x_test = np.reshape(x_test, (x_test.shape[0],x_test.shape[1],1))
+
+    predictions = model.predict(x_test) 
+    predictions = scaler.inverse_transform(predictions)
+
+    valid = predictions
+    time = [i for i in range(vreme2)]
+
+    plt.figure(1)
+    plt.plot(time[broj_treninga:],valid,color = 'yellow')
+
 """
 #testiranje funkcije
 zbir = 0
@@ -159,8 +210,8 @@ for i in range(300):
         h += rand(1,7)
         zbir -= h
 
-    if i > 30 and i < 200:
-        show_world(i)
+    if i >= 130:
+        predict_infected(rez,300)
     
     show_plot(zbir,d,h,i,pop)
 
