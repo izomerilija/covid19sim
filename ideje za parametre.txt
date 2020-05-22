@@ -10,3 +10,4 @@ udaljenost
 zatvoreni prostor
 bolnice - lecenje
 vece zadovoljstvo - manje incidenata
+testiranje
