@@ -76,7 +76,8 @@ def main():
             menuScreen.returnTitle().blit(labelSee, (200,150))
    
             if tempScreenButton:
-                simulationPlay(simScreen,textBoxO)
+                simScreen.makeDisplay()
+                simulationPlay(textBoxO,simScreen)
                 menuScreen.endCurrent()
 
         elif tempScreen.checkUpdate():
