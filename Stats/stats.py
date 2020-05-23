@@ -20,6 +20,7 @@ izleceni = [0]
 color = ['red','black','blue','green']
 label = ['Zarazeni','Mrtvi','Izleceni','Zivi']
 pred = []
+network = []
 
 """
 funkcija za plotovanje
@@ -161,6 +162,7 @@ def make_model(infected):
 #funkcija za predikciju broja zarazenih
 def predict_infected(inf,vreme):
     global pred
+    global network
     if not pred:
         network = make_model(inf)
     podaci = np.array(inf[-10 : ])
@@ -169,12 +171,11 @@ def predict_infected(inf,vreme):
     x_test = []
     x_test.append(skalirani_podaci)
     x_test = np.array(x_test)
-    x_test = np.reshape(x_test,(x_test[0],x_test[1],1))
     prediction = network.predict(x_test)
     prediction = scaler.inverse_transform(prediction)
-    pred.append(prediction)
+    pred.append(prediction[0,0])
     plt.figure(1)
-    plt.plot(time[vreme:],pred,color = 'yellow')
+    plt.plot(time[vreme - len(pred) + 1:],pred,color = 'yellow')
     plt.show() 
 
 """
