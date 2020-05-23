@@ -19,6 +19,7 @@ zivi = [0]
 izleceni = [0]
 color = ['red','black','blue','green']
 label = ['Zarazeni','Mrtvi','Izleceni','Zivi']
+pred = []
 
 """
 funkcija za plotovanje
@@ -127,8 +128,8 @@ for i in range(79):
 nesto = input()
 """
 
-#funkcija za predikciju dogadjaja
-def predict_infected(infected,vreme2):
+#funkcija za pravljenje neuronske mreze
+def make_model(infected):
     infected = np.array(infected)
     broj_treninga = len(infected)
 
@@ -139,7 +140,7 @@ def predict_infected(infected,vreme2):
     x_train = []
     y_train = []
 
-    for i in range(10,len(trenazni_podaci)):
+    for i in range(20,len(trenazni_podaci)):
         x_train.append(trenazni_podaci[i - 10:i,0])
         y_train.append(trenazni_podaci[i,0])
 
@@ -154,25 +155,27 @@ def predict_infected(infected,vreme2):
     model.add(Dense(1))
 
     model.compile(optimizer='adam', loss='mean_squared_error')
-    model.fit(x_train, y_train, batch_size=1, epochs=10)
+    model.fit(x_train, y_train, batch_size=1, epochs=30)
+    return model
 
-    test_data = skalirani_podaci[broj_treninga - 10: , : ]
+#funkcija za predikciju broja zarazenih
+def predict_infected(inf,vreme):
+    global pred
+    if not pred:
+        network = make_model(inf)
+    podaci = np.array(inf[-10 : ])
+    scaler = MinMaxScaler(feature_range = (0,1))
+    skalirani_podaci = scaler.fit_transform(podaci.reshape(-1,1))
     x_test = []
-
-    for i in range(10,len(test_data)):
-        x_test.append(test_data[i - 10:i,0])
-
+    x_test.append(skalirani_podaci)
     x_test = np.array(x_test)
-    x_test = np.reshape(x_test, (x_test.shape[0],x_test.shape[1],1))
-
-    predictions = model.predict(x_test) 
-    predictions = scaler.inverse_transform(predictions)
-
-    valid = predictions
-    time = [i for i in range(vreme2)]
-
+    x_test = np.reshape(x_test,(x_test[0],x_test[1],1))
+    prediction = network.predict(x_test)
+    prediction = scaler.inverse_transform(prediction)
+    pred.append(prediction)
     plt.figure(1)
-    plt.plot(time[broj_treninga:],valid,color = 'yellow')
+    plt.plot(time[vreme:],pred,color = 'yellow')
+    plt.show() 
 
 """
 #testiranje funkcije
@@ -211,7 +214,7 @@ for i in range(300):
         zbir -= h
 
     if i >= 130:
-        predict_infected(rez,300)
+        predict_infected(rez,i)
     
     show_plot(zbir,d,h,i,pop)
 

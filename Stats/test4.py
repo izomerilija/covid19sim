@@ -42,7 +42,6 @@ model.fit(x_train, y_train, batch_size=1, epochs=100)
 #kreacije podataka za testiranje
 test_data = skalirani_podaci[redovi - 3: , : ]
 x_test = []
-y_test =  podaci.reshape(-1,1)[redovi : , : ]
 
 for i in range(3,len(test_data)):
     x_test.append(test_data[i-3:i,0])
@@ -61,11 +60,22 @@ valid2 = predictions
 time = [i for i in range(15)]
 
 #plotovanje
-plt.figure(figsize=(8,4))
-plt.title('Model')
-plt.xlabel('Date', fontsize=18)
-plt.ylabel('Close Price USD ($)', fontsize=18)
+plt.figure(figsize=(8,5))
+plt.title('Fibonacijev niz')
+plt.xlabel('Redni broj', fontsize=18)
+plt.ylabel('Vrednost', fontsize=18)
 plt.plot(time[:redovi],train)
 plt.plot(time[redovi - 1:],valid)
 plt.plot(time[redovi:],valid2)
 plt.show()
+
+#poslednja tri
+pod = podaci[-3:]
+skal_pod = scaler.transform(pod.reshape(-1,1))
+X_test = []
+X_test.append(skal_pod)
+X_test = np.array(X_test)
+X_test = np.reshape(X_test, (X_test.shape[0],X_test.shape[1],1))
+pred = model.predict(X_test)
+pred = scaler.inverse_transform(pred)
+print(pred)
