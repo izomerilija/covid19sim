@@ -14,19 +14,22 @@ pg.init()
 
 
 
-menuScreen = Screen("menu screen",600,400)
+menuScreen = Screen("COVID 19",560,400)
 tempScreen = Screen("temp screen",400,300)
-simScreen = Screen("Simulator",500,600,(0,0,0))
+simScreen = Screen("Simulator  of COVID 19",500,600,(0,0,0))
 mainClock = pg.time.Clock()
 
 myfont = pg.font.SysFont("Arial", 20)
-label = myfont.render(" Enter a number of people =>",1, (255,255,0))
-labelReady = Button(220,210,70,50,(255,0,0),"READY!")
+label = myfont.render("    Enter a number of people =>",1, (255,255,0))
+labelReady = Button(405,170,120,70,(255,0,0),"READY!")
 labelReturn = Button(150,170,70,50,(255,255,0),"RETURN!")
-labelCity = myfont.render(" Chose a real city =>",1, (255,255,0))
-dropButton = Button(199,156,80,15,(40,40,40),"                               ")
+labelCity = myfont.render("          Chose a real city =>",1, (255,255,0))
+dropButton = Button(248,153,80,15,(40,40,40),"                               ")
 myfont2 = pg.font.SysFont("Arial", 17)
 labelSee = myfont2.render(" click to see",1, (0,0,0))
+LabelGloves = myfont.render("     Procent of wear gloves =>",1,(255,255,0))
+LabelMasks = myfont.render("     Procent of wear masks => ",1,(255,255,0))
+LabelRespirator = myfont.render(" Enter a number of respirator =>",1,(255,255,0))
 
 startButton = Button(0,500,150,50,(0,0,255),"START",(0,0,0))
 stopButton = Button(160,500,150,50,(0,0,255),"STOP",(0,0,0))
@@ -46,12 +49,20 @@ healthycolor = (0, 255, 170)
 win = menuScreen.makeDisplay()
     
 textBoxes = []
-textBoxO = TextBox(218,29,100,50,4)
+textBoxO = TextBox(240,29,100,50,4)
 textBox1 = TextBox(700,700,100,50,4)
+textBoxGloves = TextBox(240,195,100,50,4)
+textBoxMasks = TextBox(240,270,100,50,4)
+textBoxRespirator = TextBox(240,338,100,50,4)
 textBoxes.append(textBoxO)
 textBoxes.append(textBox1)
+textBoxes.append(textBoxGloves)
+textBoxes.append(textBoxMasks)
+textBoxes.append(textBoxRespirator)
 running = True
-   
+icon = pg.image.load('covid19\\iconCorona.png')
+pg.display.set_icon(icon)
+coronaImage = pg.image.load("covid19\\corona2.jpg")
 while running:
     menuScreen.screenUpdate()
     tempScreen.screenUpdate()
@@ -62,38 +73,61 @@ while running:
     else:
         n = int(textBoxO.returnValue())
 
-    tempDropButton = dropButton.isOver(mousePos, mouseClick)
-    if tempDropButton:
-        b = 170
-        i = 0
-        for i in range(5):
-            b += 30
-            textBox1 = TextBox(188,100,100,50,4)
-            textBoxes.append(textBox1)
-            textBox1.draw(menuScreen.returnTitle())
-            if i == 0:
-                city = myfont.render(" novi sad",1,(255,255,0))
-            if i == 1:
-                city = myfont.render(" new york",1,(255,255,0))
-            if i == 2:
-                city = myfont.render("  milano",1,(255,255,0))
-            if i == 3:
-                city = myfont.render("  valjevo",1,(255,255,0))
-            if i == 4:
-                city = myfont.render("   svet",1,(255,255,0))
-            menuScreen.returnTitle().blit(city,(206,b-30))
+    
+            
 
     if menuScreen.checkUpdate():
+        
+        dropButton.drawButton(menuScreen.returnTitle())
+        tempDropButton = dropButton.isOver(mousePos, mouseClick)
+        if tempDropButton:
+            menuScreen.returnTitle().blit(coronaImage,(0,0))
+            x = 30
+            i = 0
+            for i in range(5):
+                textBox1 = TextBox(240,100,100,50,4)
+                textBoxes.append(textBox1)
+                textBox1.draw(menuScreen.returnTitle())
+                if i == 0:
+                    city = myfont.render("Novi Sad, ",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 75
+                elif i == 1:
+                    city = myfont.render("New York, ",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 80
+                elif i == 2:
+                    city = myfont.render("Milano,",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 57
+                elif i == 3:
+                    city = myfont.render("Valjevo, ",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 60
+                elif i == 4:
+                    city = myfont.render("Svet.",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 75
+        
         simScreenButton = labelReady.isOver(mousePos,mouseClick)
         if not tempDropButton:
-            labelReady.drawButton(menuScreen.returnTitle(),True)
+            menuScreen.returnTitle().blit(coronaImage,(0,0))
+            menuScreen.returnTitle().blit(LabelGloves, (0,210))
+            menuScreen.returnTitle().blit(LabelMasks, (0,280))
+            textBoxGloves.draw(menuScreen.returnTitle())
+            textBoxMasks.draw(menuScreen.returnTitle())
+        textBoxRespirator.draw(menuScreen.returnTitle())
+        labelReady.drawButton(menuScreen.returnTitle(),True)
         menuScreen.returnTitle().blit(label,(0,40))
-        menuScreen.returnTitle().blit(labelCity, (0,130))
+        menuScreen.returnTitle().blit(labelCity, (0,120))
+        
+        
+        menuScreen.returnTitle().blit(LabelRespirator, (0,350))
             
         textBoxO.draw(menuScreen.returnTitle())
         textBox1.draw(menuScreen.returnTitle())
-        dropButton.drawButton(menuScreen.returnTitle())
-        menuScreen.returnTitle().blit(labelSee, (200,150))
+        
+        menuScreen.returnTitle().blit(labelSee, (248,150))
    
         if simScreenButton:
             win = simScreen.makeDisplay()
@@ -124,12 +158,12 @@ while running:
                 thread.join()
         
 
-        
+        for event in pg.event.get():
             if event.type == pg.QUIT:
                 win = menuScreen.makeDisplay()
                 simScreen.endCurrent()
         
-       
+    
     Click = False
         #event
     for event in pg.event.get():
