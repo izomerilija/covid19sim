@@ -21,6 +21,7 @@ color = ['red','black','blue','green']
 label = ['Zarazeni','Mrtvi','Izleceni','Zivi']
 pred = []
 network = []
+br = 1
 
 """
 funkcija za plotovanje
@@ -129,7 +130,7 @@ for i in range(79):
 nesto = input()
 """
 
-#funkcija za pravljenje neuronske mreze
+#funkcija za pravljenje neuronske mreze, potreban parametar samo lista zarazenih. Vama nebitna.
 def make_model(infected):
     infected = np.array(infected)
     broj_treninga = len(infected)
@@ -159,25 +160,58 @@ def make_model(infected):
     model.fit(x_train, y_train, batch_size=1, epochs=30)
     return model
 
-#funkcija za predikciju broja zarazenih
+#funkcija za predikciju broja zarazenih, potrebni parametri lista zarazenih i vreme,tj. iteracija u petlji
 def predict_infected(inf,vreme):
     global pred
     global network
+
     if not pred:
         network = make_model(inf)
+    
     podaci = np.array(inf[-10 : ])
     scaler = MinMaxScaler(feature_range = (0,1))
     skalirani_podaci = scaler.fit_transform(podaci.reshape(-1,1))
+
     x_test = []
     x_test.append(skalirani_podaci)
     x_test = np.array(x_test)
+
     prediction = network.predict(x_test)
     prediction = scaler.inverse_transform(prediction)
     pred.append(prediction[0,0])
+
     plt.figure(1)
     plt.plot(time[vreme - len(pred) + 1:],pred,color = 'yellow')
-    plt.show() 
+    plt.show()
+"""
+#pokusaj druge funkcije za predikciju
+def predict_infected2(inf,vreme):
+    global pred
+    global network
+    global br
+    if not np.array(pred).any():
+        network = make_model(inf)
 
+        scaler = MinMaxScaler(feature_range = (0,1)) 
+        test_data = scaler.fit_transform(np.array(inf[math.ceil(len(inf) * 0.8) - 10:]).reshape(-1,1))
+        x_test = []
+
+        for i in range(10,len(test_data)):
+            x_test.append(test_data[i - 10:i,0])
+
+        x_test = np.array(x_test)
+        x_test = np.reshape(x_test, (x_test.shape[0],x_test.shape[1],1))
+
+        predictions = network.predict(x_test)
+        predictions = scaler.inverse_transform(predictions)
+
+        print(predictions[:,0])
+        pred = predictions[:,0]
+
+    plt.figure(1)
+    plt.plot(time[vreme:],pred[0:br],color = 'yellow')
+    br += 1 
+"""
 """
 #testiranje funkcije
 zbir = 0
