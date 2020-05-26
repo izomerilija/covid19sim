@@ -15,6 +15,28 @@ import threading
 pg.init()
 
 
+humansize = 1
+odmeraj = 0.1
+duzina = 500
+rangelow = 3
+rangehigh = duzina - rangelow
+
+mapa = pg.image.load('mapa.png')  
+
+black = (0, 0, 0, 255)
+white = (255, 255, 255, 255)
+healthycolor = (0, 160, 110)
+dormantcolor = (0, 50, 255)
+infectedcolor = (220, 0, 0)
+
+numhealthy = 0
+numdormant = 0
+numinfected = 0
+numdead = 0
+
+buttonstop = False
+
+
 class Screen():
     def __init__(self, title, x, y, fill = (40,40,40)):
         self.title = title
@@ -45,6 +67,31 @@ class Screen():
 
 class Citizen:
 
+    def sleepcheck(self):
+        time.sleep(odmeraj)
+        while(buttonstop):
+            time.sleep(odmeraj)
+        if self.color == healthycolor:
+            global numdormant
+            if simScreen.returnTitle().get_at([self.x - 1, self.y]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x + 1, self.y]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x, self.y - 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x, self.y + 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x + 1, self.y + 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x - 1, self.y + 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x + 1, self.y - 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x - 1, self.y - 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x, self.y]) == infectedcolor:
+
+                self.color = dormantcolor
+                numdormant += 1
+                self.begin = time.perf_counter()
+    #probno - 10 sekundi samo da se vidi razlika
+        elif self.color == dormantcolor and time.perf_counter() - self.begin > 10:
+            self.color = infectedcolor
+            global numinfected
+            numinfected += 1
+
     def randompath(self, side):
         availablesides = []
         if side == "desno":
@@ -59,41 +106,41 @@ class Citizen:
                 r = random.randint(0, len(availablesides) - 1)
                 if availablesides[r] == "desno":
                     while mapa.get_at([self.x, self.y - 4]) == white or  mapa.get_at([self.x, self.y + 4]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x + 1, self.y, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.x += 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x + 1, self.y, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.x += 1
                 
                 elif availablesides[r] == "dole":
                     while mapa.get_at([self.x - 4, self.y]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y + 1, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.y += 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y + 1, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.y += 1
 
                 else:
                     while mapa.get_at([self.x - 4, self.y]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y - 1, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.y -= 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y - 1, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.y -= 1
                 
                 self.randompath(availablesides[r])
@@ -116,41 +163,42 @@ class Citizen:
                 r = random.randint(0, len(availablesides) - 1)
                 if availablesides[r] == "levo":
                     while mapa.get_at([self.x, self.y - 4]) == white or  mapa.get_at([self.x, self.y + 4]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x - 1, self.y, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.x -= 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x - 1, self.y, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.x -= 1
                 
                 elif availablesides[r] == "dole":
                     while mapa.get_at([self.x + 4, self.y]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y + 1, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.y += 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y + 1, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.y += 1
+                    
 
                 else:
                     while mapa.get_at([self.x + 4, self.y]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y - 1, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.y -= 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y - 1, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.y -= 1
                 
                 self.randompath(availablesides[r])
@@ -175,41 +223,41 @@ class Citizen:
                  
                 if availablesides[r] == "dole":
                     while mapa.get_at([self.x - 4, self.y]) == white or mapa.get_at([self.x + 4, self.y]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y + 1, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.y += 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y + 1, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.y += 1
 
                 elif availablesides[r] == "desno":
                     while mapa.get_at([self.x, self.y - 4]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x + 1, self.y, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.x += 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x + 1, self.y, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.x += 1
 
                 else:
                     while mapa.get_at([self.x, self.y - 4]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x - 1, self.y, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.x -= 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x - 1, self.y, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.x -= 1
                 
                 self.randompath(availablesides[r])
@@ -233,41 +281,41 @@ class Citizen:
                  
                 if availablesides[r] == "gore":
                     while mapa.get_at([self.x - 4, self.y]) == white or mapa.get_at([self.x + 4, self.y]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y - 1, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.y -= 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y - 1, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.y -= 1
 
                 elif availablesides[r] == "desno":
                     while mapa.get_at([self.x, self.y + 4]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x + 1, self.y, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.x += 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x + 1, self.y, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.x += 1
 
                 else:
                     while mapa.get_at([self.x, self.y + 4]) == white:
+                        self.sleepcheck()
                         pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                         pg.draw.rect(simScreen.returnTitle(), self.color, (self.x - 1, self.y, humansize, humansize))
                         pg.display.update()
-                        time.sleep(odmeraj)
                         self.x -= 1
+                    self.sleepcheck()
                     pg.draw.rect(simScreen.returnTitle(), white, (self.x, self.y, humansize, humansize))
                     pg.draw.rect(simScreen.returnTitle(), self.color, (self.x - 1, self.y, humansize, humansize))
                     pg.display.update()
-                    time.sleep(odmeraj)
                     self.x -= 1
                 
                 self.randompath(availablesides[r])
@@ -284,7 +332,7 @@ class Citizen:
         pg.display.update()
         i = 1
         strana = ""
-        time.sleep(odmeraj)
+        self.sleepcheck()
         while i < duzina:
             if self.x + i + 2 < duzina and mapa.get_at([self.x + i, self.y]) != black:
                 strana = "desno"
@@ -302,90 +350,80 @@ class Citizen:
         if strana == "desno":
             i += self.x
             while self.x < i:
+                self.sleepcheck()
                 pg.draw.rect(simScreen.returnTitle(), black, (self.x, self.y, humansize, humansize))
                 pg.draw.rect(simScreen.returnTitle(), self.color, (self.x + 1, self.y, humansize, humansize))
                 pg.display.update()
                 self.x += 1
-                time.sleep(odmeraj)
             self.randompath("desno")
 
         elif strana == "levo":
             i = self.x - i
             while self.x > i:
+                self.sleepcheck()
                 pg.draw.rect(simScreen.returnTitle(), black, (self.x, self.y, humansize, humansize))
                 pg.draw.rect(simScreen.returnTitle(), self.color, (self.x - 1, self.y, humansize, humansize))
                 pg.display.update()
                 self.x -= 1
-                time.sleep(odmeraj)
             self.randompath("levo")
 
         elif strana == "dole":
             i += self.y
             while self.y < i:
+                self.sleepcheck()
                 pg.draw.rect(simScreen.returnTitle(), black, (self.x, self.y, humansize, humansize))
                 pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y + 1, humansize, humansize))
                 pg.display.update()
                 self.y += 1
-                time.sleep(odmeraj)
             self.randompath("dole")
 
         else:
             i = self.y - i
             while self.y > i:
+                self.sleepcheck()
                 pg.draw.rect(simScreen.returnTitle(), black, (self.x, self.y, humansize, humansize))
                 pg.draw.rect(simScreen.returnTitle(), self.color, (self.x, self.y - 1, humansize, humansize))
                 pg.display.update()
                 self.y -= 1
-                time.sleep(odmeraj)
             self.randompath("gore")
         
 
 
     def __init__(self):
-        self.color = healthycolor
         self.x = random.randint(rangelow, rangehigh)
         self.y = random.randint(rangelow, rangehigh)
         while mapa.get_at([self.x, self.y]) != black:
             self.x = random.randint(rangelow, rangehigh)
             self.y = random.randint(rangelow, rangehigh)
-        #self.setdestination()
-        self.goto()
     
+def spawninfected():
+    c = Citizen()
+    c.color = infectedcolor
+    c.goto()
+
 def spawn():
     c = Citizen()
-
-def sleepCitizen():
-    time.sleep(1)
+    c.color = healthycolor
+    c.goto()
 
 
 menuScreen = Screen("menu screen",600,400)
 tempScreen = Screen("temp screen",400,300)
 simScreen = Screen("Simulator",500,600,(0,0,0))
-mainClock = pg.time.Clock()
+
 
 myfont = pg.font.SysFont("Arial", 20)
-label = myfont.render(" Enter a number of people =>",1, (255,255,0))
+label = myfont.render(" Enter the number of people:",1, (255,255,0))
 labelReady = Button(220,210,70,50,(255,0,0),"READY!")
 labelReturn = Button(150,170,70,50,(255,255,0),"RETURN!")
-labelCity = myfont.render(" Chose a real city =>",1, (255,255,0))
+labelCity = myfont.render(" Choose a real city =>",1, (255,255,0))
 dropButton = Button(199,156,80,15,(40,40,40),"                               ")
 myfont2 = pg.font.SysFont("Arial", 17)
 labelSee = myfont2.render(" click to see",1, (0,0,0))
 
-startButton = Button(0,500,150,50,(0,0,255),"START",(0,0,0))
-stopButton = Button(160,500,150,50,(0,0,255),"STOP",(0,0,0))
+startButton = Button(0,500,150,50,(0,0,255),"START", (255, 255, 255))
+stopButton = Button(160,500,150,50,(0,0,255),"STOP", (255, 255, 255))
 
-humansize = 1
-odmeraj = 0.1
-duzina = 500
-rangelow = 3
-rangehigh = duzina - rangelow
-
-mapa = pg.image.load('covid19\\NEWMAP.png')  
-
-black = (0, 0, 0, 255)
-white = (255, 255, 255, 255)
-healthycolor = (0, 255, 170)
 
 win = menuScreen.makeDisplay()
     
@@ -457,9 +495,13 @@ while running:
 
         if startButtonSim:
             threads = []
-            #start = time.perf_counter()
+            numinfected += 1
+            inf = threading.Thread(target=spawninfected)   
+            inf.start()
+            threads.append(inf)
+
             for _ in range(n):
-                
+                numhealthy += 1
                 t = threading.Thread(target=spawn)   
                 t.start()
                 threads.append(t)
@@ -495,4 +537,3 @@ while running:
                         
 
     pg.display.update()
-    mainClock.tick(60)
