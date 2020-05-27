@@ -7,6 +7,7 @@ import math
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import Dense, LSTM
+from base import *
 
 #cini plotovanje interaktivnim
 plt.ion()
@@ -212,6 +213,18 @@ def predict_infected2(inf,vreme):
     plt.plot(time[vreme:],pred[0:br],color = 'yellow')
     br += 1 
 """
+
+#funkcija za plotovanje situacije iz baze podataka
+def plot_base(i):
+    plt.figure(8)
+    plt.xlabel("Vreme")
+    plt.ylabel("Zarazeni")
+    plt.title("Odnos zarazenih vremenom")
+    case = get_case(i)
+    plt.stackplot(case[4],case[2],case[1],case[3],case[0], labels = label, colors = color) #sve intovi nema liste -> problem
+    plt.legend(loc = 'upper left')
+    plt.show()
+
 """
 #testiranje funkcije
 zbir = 0
@@ -219,7 +232,7 @@ pop = 500
 d = 0
 h = 0
 
-for i in range(300):
+for i in range(50):
     b = rand(1,10)
     if i <= 50 or i >= 250:
         if b > 8:
@@ -249,8 +262,9 @@ for i in range(300):
         zbir -= h
 
     if i >= 130:
-        predict_infected(rez,i)
+        show_world(i-130)
     
+    plot_base(1)
     show_plot(zbir,d,h,i,pop)
 
 #ovo postoji da ne bi odmah nakon zavrsetka plotovanja izaslo
