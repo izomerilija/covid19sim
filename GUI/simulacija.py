@@ -21,11 +21,18 @@ duzina = 500
 rangelow = 3
 rangehigh = duzina - rangelow
 
+<<<<<<< HEAD
 mapa = pg.image.load('mapa.png')  
 
 black = (0, 0, 0, 255)
 white = (255, 255, 255, 255)
 healthycolor = (0, 160, 110)
+=======
+
+black = (0, 0, 0, 255)
+white = (255, 255, 255, 255)
+healthycolor = (255,77,0)
+>>>>>>> f942762401beaa9973464376db4637bc688a5b68
 dormantcolor = (0, 50, 255)
 infectedcolor = (220, 0, 0)
 
@@ -34,7 +41,11 @@ numdormant = 0
 numinfected = 0
 numdead = 0
 
+<<<<<<< HEAD
 buttonstop = False
+=======
+#buttonstop = False
+>>>>>>> f942762401beaa9973464376db4637bc688a5b68
 
 
 class Screen():
@@ -65,7 +76,47 @@ class Screen():
         return self.screen
 
 
+stopClick = False
 class Citizen:
+    
+    def sleepcheck(self):
+        time.sleep(odmeraj)
+        global stopClick
+        if stopButton.isOver(mousePos,mouseClick):
+            stopClick = True
+            print("eee")
+        while stopClick:
+           time.sleep(odmeraj)
+           
+        
+            
+        if self.color == healthycolor:
+            global numdormant
+            if simScreen.returnTitle().get_at([self.x - 1, self.y]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x + 1, self.y]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x, self.y - 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x, self.y + 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x + 1, self.y + 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x - 1, self.y + 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x + 1, self.y - 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x - 1, self.y - 1]) == infectedcolor or \
+            simScreen.returnTitle().get_at([self.x, self.y]) == infectedcolor:
+
+                self.color = dormantcolor
+                numdormant += 1
+                self.begin = time.perf_counter()
+                labelDormant = myfont2.render(str(numdormant),1,(70,70,70)) 
+                pg.draw.rect(simScreen.returnTitle(),(0,0,255), (435,520,30,15))
+                simScreen.returnTitle().blit(labelDormant,(435,520))
+    #probno - 10 sekundi samo da se vidi razlika
+        elif self.color == dormantcolor and time.perf_counter() - self.begin > 10:
+            self.color = infectedcolor
+            global numinfected
+            numinfected += 1
+            labelInfected = myfont2.render(str(numinfected),1,(255,20,0)) 
+            pg.draw.rect(simScreen.returnTitle(),(0,0,255),(337,570,50,20))
+            simScreen.returnTitle().blit(labelInfected,(355,570))
+           
 
     def sleepcheck(self):
         time.sleep(odmeraj)
@@ -95,6 +146,7 @@ class Citizen:
     def randompath(self, side):
         availablesides = []
         if side == "desno":
+            
             if  self.x + 4 < duzina and mapa.get_at([self.x + 4, self.y]) == white:
                 availablesides.append("desno")
             if self.y + 4 < duzina and mapa.get_at([self.x, self.y + 4]) == white:
@@ -397,6 +449,16 @@ class Citizen:
             self.y = random.randint(rangelow, rangehigh)
     
 def spawninfected():
+<<<<<<< HEAD
+    c = Citizen()
+    c.color = infectedcolor
+    c.goto()
+
+def spawn():
+    c = Citizen()
+    c.color = healthycolor
+    c.goto()
+=======
     c = Citizen()
     c.color = infectedcolor
     c.goto()
@@ -406,9 +468,15 @@ def spawn():
     c.color = healthycolor
     c.goto()
 
+def sleepCitizen(odmeraj):
+    while True:
+        time.sleep(odmeraj) 
+>>>>>>> f942762401beaa9973464376db4637bc688a5b68
 
-menuScreen = Screen("menu screen",600,400)
+
+menuScreen = Screen("COVID 19",560,400)
 tempScreen = Screen("temp screen",400,300)
+<<<<<<< HEAD
 simScreen = Screen("Simulator",500,600,(0,0,0))
 
 
@@ -418,22 +486,58 @@ labelReady = Button(220,210,70,50,(255,0,0),"READY!")
 labelReturn = Button(150,170,70,50,(255,255,0),"RETURN!")
 labelCity = myfont.render(" Choose a real city =>",1, (255,255,0))
 dropButton = Button(199,156,80,15,(40,40,40),"                               ")
+=======
+simScreen = Screen("Simulator  of COVID 19",500,600,(0,0,0))
+mainClock = pg.time.Clock()
+
+myfont = pg.font.SysFont("Arial", 20)
+myfont2 = pg.font.SysFont("freesansbold.ttf", 15)
+label = myfont.render("  Enter the number of people =>",1, (255,255,0))
+labelReady = Button(405,170,120,70,(255,0,0),"READY!")
+labelReturn = Button(150,170,70,50,(255,255,0),"RETURN!")
+labelCity = myfont.render("          Choose a real city =>",1, (255,255,0))
+dropButton = Button(248,153,80,15,(40,40,40),"                               ")
+>>>>>>> f942762401beaa9973464376db4637bc688a5b68
 myfont2 = pg.font.SysFont("Arial", 17)
 labelSee = myfont2.render(" click to see",1, (0,0,0))
+LabelGloves = myfont.render("     Percent of wear gloves =>",1,(255,255,0))
+LabelMasks = myfont.render("     Percent of wear masks => ",1,(255,255,0))
+LabelRespirator = myfont.render("Enter the number of respirators =>",1,(255,255,0))
 
+startButton = Button(0,500,150,50,(0,0,255),"START",(255,255,255))
+stopButton = Button(160,500,150,50,(0,0,255),"STOP",(255,255,255))
+
+<<<<<<< HEAD
 startButton = Button(0,500,150,50,(0,0,255),"START", (255, 255, 255))
 stopButton = Button(160,500,150,50,(0,0,255),"STOP", (255, 255, 255))
 
+=======
+
+
+mapa = pg.image.load('covid19\\NEWMAP.png')  
+
+
+>>>>>>> f942762401beaa9973464376db4637bc688a5b68
 
 win = menuScreen.makeDisplay()
     
 textBoxes = []
-textBoxO = TextBox(218,29,100,50,4)
+textBoxO = TextBox(240,29,100,50,4)
 textBox1 = TextBox(700,700,100,50,4)
+textBoxGloves = TextBox(240,195,100,50,4)
+textBoxMasks = TextBox(240,270,100,50,4)
+textBoxRespirator = TextBox(240,338,100,50,4)
 textBoxes.append(textBoxO)
 textBoxes.append(textBox1)
+textBoxes.append(textBoxGloves)
+textBoxes.append(textBoxMasks)
+textBoxes.append(textBoxRespirator)
 running = True
-   
+
+icon = pg.image.load('covid19\\iconCorona.png')
+pg.display.set_icon(icon)
+coronaImage = pg.image.load("covid19\\corona2.jpg")
+pg.display.flip()
 while running:
     menuScreen.screenUpdate()
     tempScreen.screenUpdate()
@@ -444,39 +548,61 @@ while running:
     else:
         n = int(textBoxO.returnValue())
 
-    tempDropButton = dropButton.isOver(mousePos, mouseClick)
-    if tempDropButton:
-        b = 170
-        i = 0
-        for i in range(5):
-            b += 30
-            textBox1 = TextBox(188,100,100,50,4)
-            textBoxes.append(textBox1)
-            textBox1.draw(menuScreen.returnTitle())
-            if i == 0:
-                city = myfont.render(" novi sad",1,(255,255,0))
-            if i == 1:
-                city = myfont.render(" new york",1,(255,255,0))
-            if i == 2:
-                city = myfont.render("  milano",1,(255,255,0))
-            if i == 3:
-                city = myfont.render("  valjevo",1,(255,255,0))
-            if i == 4:
-                city = myfont.render("   svet",1,(255,255,0))
-            menuScreen.returnTitle().blit(city,(206,b-30))
+    
+            
 
     if menuScreen.checkUpdate():
         
+        dropButton.drawButton(menuScreen.returnTitle())
+        tempDropButton = dropButton.isOver(mousePos, mouseClick)
+        if tempDropButton:
+            menuScreen.returnTitle().blit(coronaImage,(0,0))
+            x = 30
+            i = 0
+            for i in range(5):
+                textBox1 = TextBox(240,100,100,50,4)
+                textBoxes.append(textBox1)
+                textBox1.draw(menuScreen.returnTitle())
+                if i == 0:
+                    city = myfont.render("Novi Sad, ",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 75
+                elif i == 1:
+                    city = myfont.render("New York, ",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 80
+                elif i == 2:
+                    city = myfont.render("Milano,",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 57
+                elif i == 3:
+                    city = myfont.render("Valjevo, ",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 60
+                elif i == 4:
+                    city = myfont.render("Svet.",1,(255,255,0))
+                    menuScreen.returnTitle().blit(city,(x,200))
+                    x += 75
+        
         simScreenButton = labelReady.isOver(mousePos,mouseClick)
         if not tempDropButton:
-            labelReady.drawButton(menuScreen.returnTitle(),True)
+            menuScreen.returnTitle().blit(coronaImage,(0,0))
+            menuScreen.returnTitle().blit(LabelGloves, (0,210))
+            menuScreen.returnTitle().blit(LabelMasks, (0,280))
+            textBoxGloves.draw(menuScreen.returnTitle())
+            textBoxMasks.draw(menuScreen.returnTitle())
+        textBoxRespirator.draw(menuScreen.returnTitle())
+        labelReady.drawButton(menuScreen.returnTitle(),True)
         menuScreen.returnTitle().blit(label,(0,40))
-        menuScreen.returnTitle().blit(labelCity, (0,130))
+        menuScreen.returnTitle().blit(labelCity, (0,120))
+        
+        
+        menuScreen.returnTitle().blit(LabelRespirator, (0,350))
             
         textBoxO.draw(menuScreen.returnTitle())
         textBox1.draw(menuScreen.returnTitle())
-        dropButton.drawButton(menuScreen.returnTitle())
-        menuScreen.returnTitle().blit(labelSee, (200,150))
+        
+        menuScreen.returnTitle().blit(labelSee, (248,150))
    
         if simScreenButton:
             win = simScreen.makeDisplay()
@@ -488,10 +614,13 @@ while running:
         
         #simScreen.returnTitle().fill((0, 0, 0))
         simScreen.returnTitle().blit(mapa, (0, 0))
+        
         startButtonSim = startButton.isOver(mousePos,mouseClick)
         stopButtonSim = stopButton.isOver(mousePos,mouseClick)
+        
         startButton.drawButton(simScreen.returnTitle())
         stopButton.drawButton(simScreen.returnTitle())
+<<<<<<< HEAD
 
         if startButtonSim:
             threads = []
@@ -509,19 +638,74 @@ while running:
 
             for thread in threads:
                 thread.join()
+=======
+        pg.draw.rect(simScreen.returnTitle(),(0,0,255),(320,500,80,40))
+        pg.draw.rect(simScreen.returnTitle(),(0,0,255),(320,550,80,40))
+        pg.draw.rect(simScreen.returnTitle(),(0,0,255),(410,500,80,40))
+        pg.draw.rect(simScreen.returnTitle(),(0,0,255),(410,550,80,40))
+        labelSim = myfont2.render("Alive: ",1,(0,255,0))
+        simScreen.returnTitle().blit(labelSim,(343,502))
+        labelSim = myfont2.render("Infected: ",1,(255,0,0))
+        simScreen.returnTitle().blit(labelSim,(336,552))
+        labelSim = myfont2.render("Dead: ",1,(0,0,0))
+        simScreen.returnTitle().blit(labelSim,(430,552))
+        labelSim = myfont2.render("Dormant: ",1,(70,70,70))
+        simScreen.returnTitle().blit(labelSim,(422,502))
+>>>>>>> f942762401beaa9973464376db4637bc688a5b68
         
 
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
+        if startButtonSim:
+            for event in pg.event.get():
+                stopClick = False
+                threads = []
+                numinfected += 1
+                labelInfected = myfont2.render(str(numinfected),1,(255,20,0)) 
+                pg.draw.rect(simScreen.returnTitle(),(0,0,255),(337,570,50,20))
+                simScreen.returnTitle().blit(labelInfected,(355,570))
+
+                labelDormant = myfont2.render(str(numdormant),1,(70,70,70)) 
+                pg.draw.rect(simScreen.returnTitle(),(0,0,255), (435,520,30,15))
+                simScreen.returnTitle().blit(labelDormant,(435,520))
+
+                inf = threading.Thread(target=spawninfected)
+                inf.start()
+                threads.append(inf)
+                #start = time.perf_counter()
+                for _ in range(n):
+                    numhealthy += 1
+                    if stopButtonSim:
+                        #sleepCitizen(odmeraj)
+                        pg.draw.rect(simScreen.returnTitle(),(0,0,255),(210,250,100,100))
+                    #st = numhealthy.__str__()
+                    labelHelathy = myfont2.render(str(numhealthy),1,(0,255,0)) 
+                    pg.draw.rect(simScreen.returnTitle(),(0,0,255), (340,520,50,15))
+                    simScreen.returnTitle().blit(labelHelathy,(340,520))
+                    
+                    
+                    t = threading.Thread(target=spawn)   
+                    t.start()
+                    threads.append(t)
+
+                for thread in threads:
+                    thread.join()
+                #print(numinfected)
+            
+            """if stopButtonSim:
                 win = menuScreen.makeDisplay()
-                simScreen.endCurrent()
+                simScreen.endCurrent()"""
+            
+                if event.type == pg.QUIT:
+                    win = menuScreen.makeDisplay()
+                    simScreen.endCurrent()
         
     
     Click = False
+    
         #event
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
+            
 
 
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -536,4 +720,9 @@ while running:
                     box.addText(event.key)
                         
 
+<<<<<<< HEAD
     pg.display.update()
+=======
+    pg.display.update()
+    #mainClock.tick(20)
+>>>>>>> f942762401beaa9973464376db4637bc688a5b68
