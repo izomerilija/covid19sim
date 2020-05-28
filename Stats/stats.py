@@ -47,7 +47,7 @@ def show_plot(infected,dead,healed,vreme,population):
     plt.legend(loc = 'upper left')
     plt.show()
     plt.pause(0.001)
-    if vreme != 299:
+    if vreme != 299:  #ovo u stvarnom kodu treba zameniti sa broj zarazenih = 0
         plt.clf()
     time.append(vreme+1)
     rez.append(infected)
@@ -221,7 +221,8 @@ def plot_base(i):
     plt.ylabel("Zarazeni")
     plt.title("Odnos zarazenih vremenom")
     case = get_case(i)
-    plt.stackplot(case[4],case[2],case[1],case[3],case[0], labels = label, colors = color) #sve intovi nema liste -> problem
+    vreme = [i + 1 for i in range(case[4])]
+    plt.stackplot(vreme,case[2],case[1],case[3],case[0], labels = label, colors = color)
     plt.legend(loc = 'upper left')
     plt.show()
 
@@ -232,7 +233,7 @@ pop = 500
 d = 0
 h = 0
 
-for i in range(50):
+for i in range(300):
     b = rand(1,10)
     if i <= 50 or i >= 250:
         if b > 8:
@@ -261,10 +262,12 @@ for i in range(50):
         h += rand(1,7)
         zbir -= h
 
-    if i >= 130:
-        show_world(i-130)
+    if i == 130:
+        show_ny(i-130)
     
-    plot_base(1)
+    if i == 10:
+        plot_base(1) #postoje sanse da ima bug da je nemoguce prikazati sva 3, baciti pogled na razlike izmedju plotovanja baze i gradova
+    
     show_plot(zbir,d,h,i,pop)
 
 #ovo postoji da ne bi odmah nakon zavrsetka plotovanja izaslo
