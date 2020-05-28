@@ -214,7 +214,7 @@ def predict_infected2(inf,vreme):
     br += 1 
 """
 
-#funkcija za plotovanje situacije iz baze podataka
+#funkcija za plotovanje situacije iz baze podataka, jedini parametar je redni broj simulacije
 def plot_base(i):
     plt.figure(8)
     plt.xlabel("Vreme")
@@ -262,11 +262,11 @@ for i in range(300):
         h += rand(1,7)
         zbir -= h
 
-    if i == 130:
+    if i >= 130:
         show_ny(i-130)
     
     if i == 10:
-        plot_base(1) #postoje sanse da ima bug da je nemoguce prikazati sva 3, baciti pogled na razlike izmedju plotovanja baze i gradova
+        plot_base(1) 
     
     show_plot(zbir,d,h,i,pop)
 
