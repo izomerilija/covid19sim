@@ -47,7 +47,7 @@ def show_plot(infected,dead,healed,vreme,population):
     plt.legend(loc = 'upper left')
     plt.show()
     plt.pause(0.001)
-    if vreme != 299:  #ovo u stvarnom kodu treba zameniti sa broj zarazenih = 0
+    if infected != 0:  #ovo valja ako odmah u simulaciji krece od jedan
         plt.clf()
     time.append(vreme+1)
     rez.append(infected)
@@ -184,6 +184,7 @@ def predict_infected(inf,vreme):
     plt.figure(1)
     plt.plot(time[vreme - len(pred) + 1:],pred,color = 'yellow')
     plt.show()
+    
 """
 #pokusaj druge funkcije za predikciju
 def predict_infected2(inf,vreme):
